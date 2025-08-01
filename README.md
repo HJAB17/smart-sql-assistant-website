@@ -1,6 +1,6 @@
-# SQL Formatter - Extension Chrome
+# Smart SQL Assistant - Application Web
 
-Une extension Chrome simple et rapide pour formater vos requêtes SQL avec des conseils d'optimisation instantanés.
+Une application web simple et rapide pour formater vos requêtes SQL avec des conseils d'optimisation instantanés.
 
 ## Fonctionnalités
 
@@ -8,41 +8,40 @@ Une extension Chrome simple et rapide pour formater vos requêtes SQL avec des c
 - ✅ Conseils d'optimisation contextuels selon le type de requête
 - ✅ Exemples rapides cliquables
 - ✅ Sauvegarde automatique des requêtes
-- ✅ Interface compacte optimisée pour popup
-- ✅ Menu contextuel pour formater le texte sélectionné
+- ✅ Interface utilisateur intuitive et élégante
+- ✅ Fonctionnalités accessibles directement depuis le navigateur
 
 ## Installation
 
-1. Téléchargez tous les fichiers dans un dossier
-2. Ouvrez Chrome et allez dans `chrome://extensions/`
-3. Activez le "Mode développeur" en haut à droite
-4. Cliquez sur "Charger l'extension non empaquetée"
-5. Sélectionnez le dossier contenant les fichiers
+Pour utiliser cette application web, suivez ces étapes :
+
+1. Téléchargez tous les fichiers du projet dans un dossier sur votre machine locale.
+2. Assurez-vous d'avoir un serveur local ou un hébergement web pour déployer l'application.
+3. Déployez les fichiers sur votre serveur ou hébergement web préféré.
 
 ## Utilisation
 
-1. Cliquez sur l'icône de l'extension dans la barre d'outils
-2. Collez votre requête SQL dans la zone de texte
-3. Cliquez sur "Formatter" pour obtenir le code formaté
-4. Consultez les conseils d'optimisation automatiques
-5. Utilisez les exemples rapides pour apprendre
+1. Accédez à l'URL où votre application est hébergée.
+2. Collez votre requête SQL dans la zone de texte prévue à cet effet.
+3. Cliquez sur "Formatter" pour obtenir le code SQL formaté.
+4. Consultez les conseils d'optimisation automatiques fournis.
+5. Utilisez les exemples rapides pour apprendre et vous inspirer.
 
 ## Structure des fichiers
 
-- `manifest.json` - Configuration de l'extension
-- `popup.html` - Interface utilisateur
-- `popup.js` - Logique JavaScript
-- `styles.css` - Styles CSS
-- `background.js` - Script de fond
-- `icons/` - Icônes de l'extension
-- `README.md` - Documentation
+- `index.html` - Page principale de l'application web
+- `styles.css` - Styles CSS pour l'application
+- `popup.js` - Logique JavaScript pour le formatage SQL et les fonctionnalités
+- `icons/` - Icônes utilisées dans l'application
+- `README.md` - Documentation du projet
 
 ## Développement
 
-Pour modifier l'extension :
-1. Modifiez les fichiers selon vos besoins
-2. Rechargez l'extension dans `chrome://extensions/`
-3. Testez les modifications
+Pour modifier l'application :
+
+1. Modifiez les fichiers selon vos besoins.
+2. Testez les modifications localement en utilisant un serveur local (par exemple, Live Server dans Visual Studio Code).
+3. Déployez les modifications sur votre serveur ou hébergement web.
 
 ## Conseils d'optimisation détectés
 
