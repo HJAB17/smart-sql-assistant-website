@@ -232,16 +232,16 @@ AND quantite > 0;`,
       });
     }
 
-    // Utilisation de OR dans les clauses WHERE
-    if (upperSQL.includes("WHERE") && upperSQL.includes("OR")) {
-      tips.push({
-        type: "performance",
-        title: "Évitez l'utilisation excessive de OR",
-        description: "L'utilisation de OR peut rendre les requêtes moins performantes. Utilisez des requêtes union ou des index appropriés.",
-        example: "SELECT * FROM table WHERE condition1 = value1 UNION SELECT * FROM table WHERE condition2 = value2",
-        icon: "zap",
-      });
-    }
+  // Vérifiez si "OR" est utilisé dans une clause WHERE
+  if (/WHERE.*\bOR\b/i.test(sql)) {
+    tips.push({
+      type: "performance",
+      title: "Évitez l'utilisation excessive de OR",
+      description: "L'utilisation de OR peut rendre les requêtes moins performantes. Utilisez des requêtes union ou des index appropriés.",
+      example: "SELECT * FROM table WHERE condition1 = value1 UNION SELECT * FROM table WHERE condition2 = value2",
+      icon: "zap",
+    });
+  }
 
     // Utilisation de JOIN sans condition
     if (upperSQL.includes("JOIN") && !upperSQL.includes("ON")) {
