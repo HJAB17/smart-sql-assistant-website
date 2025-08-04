@@ -33,6 +33,7 @@
         <div class="tabs">
             <button class="tab-button active" data-tab="formatter">Formatter</button>
             <button class="tab-button" data-tab="examples">Exemples</button>
+            <button class="tab-button" data-tab="about">À propos</button>
         </div>
         <!-- Formatter Tab -->
         <div id="formatter-tab" class="tab-content active">
@@ -94,20 +95,19 @@
                 </div>
             </div>
             <!-- Optimization Tips -->
-<div id="optimization-tips" class="section tips-section" style="display: none;">
-  <div class="section-header tips-header">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="16" x2="12" y2="12"/>
-      <line x1="12" y1="8" x2="12.01" y2="8"/>
-    </svg>
-    <span>Conseils d'optimisation (<span id="tips-count">0</span>)</span>
-  </div>
-  <div id="tips-content" class="section-content tips-content">
-    <!-- Les conseils seront insérés ici -->
-  </div>
-</div>
-
+            <div id="optimization-tips" class="section tips-section" style="display: none;">
+                <div class="section-header tips-header">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span>Conseils d'optimisation (<span id="tips-count">0</span>)</span>
+                </div>
+                <div id="tips-content" class="section-content tips-content">
+                    <!-- Les conseils seront insérés ici -->
+                </div>
+            </div>
         </div>
         <!-- Examples Tab -->
         <div id="examples-tab" class="tab-content">
@@ -209,6 +209,24 @@
                         </div>
                     </div>
                     <p class="examples-note">Cliquez sur un exemple pour l'utiliser comme base de votre requête</p>
+                </div>
+            </div>
+        </div>
+        <!-- About Tab -->
+        <div id="about-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>À propos</span>
+                </div>
+                <div class="section-content">
+                    <p>Bienvenue sur Smart SQL Assistant, votre outil en ligne pour formater et optimiser les requêtes SQL.</p>
+                    <p>Notre objectif est de vous aider à écrire des requêtes SQL propres et optimisées en quelques secondes.</p>
+                    <p>Pour toute question ou suggestion, n'hésitez pas à nous envoyer un email à : <a href="mailto:contact@smart-sql-assistant.ovh">contact@smart-sql-assistant.ovh</a></p>
                 </div>
             </div>
         </div>
