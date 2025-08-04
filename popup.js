@@ -3,28 +3,66 @@ class SQLFormatter {
     this.inputSQL = "";
     this.formattedSQL = "";
     this.optimizationTips = [];
+
     this.sqlExamples = {
-      users: `SELECT id, nom, email, derniere_connexion
+      users: {
+        query: `SELECT id, nom, email, derniere_connexion
 FROM utilisateurs
 WHERE derniere_connexion > DATE_SUB(NOW(), INTERVAL 30 DAY)
 ORDER BY derniere_connexion DESC
 LIMIT 50;`,
-      orders: `SELECT u.nom, u.email, COUNT(c.id) as nombre_commandes, SUM(c.montant) as total_achats
+        relatedTip: {
+          type: "performance",
+          title: "Ajoutez LIMIT",
+          description: "Limitez les résultats pour optimiser la performance.",
+          example: "SELECT * FROM table LIMIT 100",
+          icon: "zap",
+        }
+      },
+      orders: {
+        query: `SELECT u.nom, u.email, COUNT(c.id) as nombre_commandes, SUM(c.montant) as total_achats
 FROM utilisateurs u
 LEFT JOIN commandes c ON u.id = c.client_id
 GROUP BY u.id, u.nom, u.email
 HAVING COUNT(c.id) > 0
 ORDER BY nombre_commandes DESC;`,
-      update: `UPDATE produits
+        relatedTip: {
+          type: "optimization",
+          title: "Considérez HAVING pour filtrer les groupes",
+          description: "Utilisez HAVING pour filtrer les résultats après GROUP BY.",
+          example: "SELECT user_id, COUNT(*) FROM orders GROUP BY user_id HAVING COUNT(*) > 5",
+          icon: "database",
+        }
+      },
+      update: {
+        query: `UPDATE produits
 SET prix = prix * 1.10,
     date_modification = NOW()
 WHERE categorie_id = 1
   AND prix < 100
   AND stock > 0;`,
-      delete: `DELETE FROM sessions
+        relatedTip: {
+          type: "best-practice",
+          title: "Mise à jour conditionnelle",
+          description: "Assurez-vous que les mises à jour conditionnelles sont bien ciblées.",
+          example: "UPDATE products SET price = price * 1.10 WHERE category_id = 1 AND price < 100",
+          icon: "alert-triangle",
+        }
+      },
+      delete: {
+        query: `DELETE FROM sessions
 WHERE date_expiration < NOW()
    OR derniere_activite < DATE_SUB(NOW(), INTERVAL 7 DAY);`,
-      complexJoin: `SELECT o.id, o.date, c.nom, c.email, SUM(p.prix * oi.quantite) as total
+        relatedTip: {
+          type: "security",
+          title: "Attention : Opération sans WHERE",
+          description: "Assurez-vous que cette opération sur toute la table est intentionnelle.",
+          example: "DELETE FROM table WHERE condition = value",
+          icon: "alert-triangle",
+        }
+      },
+      complexJoin: {
+        query: `SELECT o.id, o.date, c.nom, c.email, SUM(p.prix * oi.quantite) as total
 FROM commandes o
 JOIN clients c ON o.client_id = c.id
 JOIN order_items oi ON o.id = oi.commande_id
@@ -32,7 +70,16 @@ JOIN produits p ON oi.produit_id = p.id
 WHERE o.date > '2023-01-01'
 GROUP BY o.id, o.date, c.nom, c.email
 ORDER BY total DESC;`,
-      subquery: `SELECT nom, email
+        relatedTip: {
+          type: "performance",
+          title: "Optimisez les jointures",
+          description: "Les jointures multiples peuvent être coûteuses. Assurez-vous qu'elles sont nécessaires.",
+          example: "SELECT * FROM table1 JOIN table2 ON table1.id = table2.id",
+          icon: "zap",
+        }
+      },
+      subquery: {
+        query: `SELECT nom, email
 FROM clients
 WHERE id IN (
     SELECT client_id
@@ -41,18 +88,45 @@ WHERE id IN (
     GROUP BY client_id
     HAVING SUM(montant) > 1000
 );`,
-      aggregation: `SELECT categorie_id, AVG(prix) as prix_moyen
+        relatedTip: {
+          type: "performance",
+          title: "Optimisez les sous-requêtes",
+          description: "Considérez utiliser des JOINs au lieu de sous-requêtes pour de meilleures performances.",
+          example: "SELECT u.*, COUNT(c.id) FROM users u LEFT JOIN commands c ON u.id = c.user_id GROUP BY u.id",
+          icon: "database",
+        }
+      },
+      aggregation: {
+        query: `SELECT categorie_id, AVG(prix) as prix_moyen
 FROM produits
 GROUP BY categorie_id
 HAVING AVG(prix) > 50
 ORDER BY prix_moyen DESC;`,
-      conditionalUpdate: `UPDATE stocks
+        relatedTip: {
+          type: "optimization",
+          title: "Utilisez des agrégations",
+          description: "Les fonctions d'agrégation peuvent aider à résumer les données.",
+          example: "SELECT category_id, AVG(price) FROM products GROUP BY category_id",
+          icon: "database",
+        }
+      },
+      conditionalUpdate: {
+        query: `UPDATE stocks
 SET quantite = quantite - 1
 WHERE produit_id IN (
     SELECT id FROM produits WHERE categorie_id = 1
 )
 AND quantite > 0;`,
+        relatedTip: {
+          type: "best-practice",
+          title: "Mise à jour conditionnelle",
+          description: "Les mises à jour conditionnelles doivent être bien ciblées pour éviter des effets indésirables.",
+          example: "UPDATE stocks SET quantity = quantity - 1 WHERE product_id IN (SELECT id FROM products WHERE category_id = 1)",
+          icon: "alert-triangle",
+        }
+      }
     };
+
     this.init();
   }
 
@@ -128,39 +202,45 @@ AND quantite > 0;`,
     this.saveToStorage();
   }
 
-  formatSQL() {
-    if (!this.inputSQL.trim()) return;
+formatSQL() {
+  if (!this.inputSQL.trim()) return;
 
-    // Format SQL
-    this.formattedSQL = this.inputSQL
-      .replace(/\s+/g, " ")
-      .replace(/SELECT\s+/gi, "SELECT\n    ")
-      .replace(/\s+FROM\s+/gi, "\nFROM\n    ")
-      .replace(/\s+WHERE\s+/gi, "\nWHERE\n    ")
-      .replace(/\s+AND\s+/gi, "\n    AND ")
-      .replace(/\s+OR\s+/gi, "\n    OR ")
-      .replace(/\s+ORDER\s+BY\s+/gi, "\nORDER BY\n    ")
-      .replace(/\s+GROUP\s+BY\s+/gi, "\nGROUP BY\n    ")
-      .replace(/\s+HAVING\s+/gi, "\nHAVING\n    ")
-      .replace(/\s+LIMIT\s+/gi, "\nLIMIT ")
-      .replace(/\s+JOIN\s+/gi, "\nJOIN ")
-      .replace(/\s+LEFT\s+JOIN\s+/gi, "\nLEFT JOIN ")
-      .replace(/\s+RIGHT\s+JOIN\s+/gi, "\nRIGHT JOIN ")
-      .replace(/\s+INNER\s+JOIN\s+/gi, "\nINNER JOIN ")
-      .replace(/,\s*/g, ",\n    ")
-      .replace(/\(\s*SELECT/gi, "(\n        SELECT")
-      .replace(/\)\s*AS/gi, "\n    ) AS")
-      .trim();
+  // Format SQL
+  this.formattedSQL = this.inputSQL
+    .replace(/\s+/g, " ")
+    .replace(/SELECT\s+/gi, "SELECT\n    ")
+    .replace(/\s+FROM\s+/gi, "\nFROM\n    ")
+    .replace(/\s+WHERE\s+/gi, "\nWHERE\n    ")
+    .replace(/\s+AND\s+/gi, "\n    AND ")
+    .replace(/\s+OR\s+/gi, "\n    OR ")
+    .replace(/\s+ORDER\s+BY\s+/gi, "\nORDER BY\n    ")
+    .replace(/\s+GROUP\s+BY\s+/gi, "\nGROUP BY\n    ")
+    .replace(/\s+HAVING\s+/gi, "\nHAVING\n    ")
+    .replace(/\s+LIMIT\s+/gi, "\nLIMIT ")
+    .replace(/\s+JOIN\s+/gi, "\nJOIN ")
+    .replace(/\s+LEFT\s+JOIN\s+/gi, "\nLEFT JOIN ")
+    .replace(/\s+RIGHT\s+JOIN\s+/gi, "\nRIGHT JOIN ")
+    .replace(/\s+INNER\s+JOIN\s+/gi, "\nINNER JOIN ")
+    .replace(/,\s*/g, ",\n    ")
+    .replace(/\(\s*SELECT/gi, "(\n        SELECT")
+    .replace(/\)\s*AS/gi, "\n    ) AS")
+    .trim();
 
-    // Use Prism.js to highlight the formatted SQL
-    document.getElementById("output-sql").textContent = this.formattedSQL;
-    Prism.highlightElement(document.getElementById("output-sql"));
+  // Utilisez Prism.js pour mettre en évidence le SQL formaté
+  document.getElementById("output-sql").textContent = this.formattedSQL;
+  Prism.highlightElement(document.getElementById("output-sql"));
 
-    // Analyze and show tips
-    this.optimizationTips = this.analyzeSQL(this.inputSQL);
+  // Analyser et afficher les conseils
+  const newTips = this.analyzeSQL(this.inputSQL);
+
+  // Conserver les conseils existants si aucun nouveau conseil n'est généré
+  if (newTips.length > 0) {
+    this.optimizationTips = newTips;
     this.displayOptimizationTips();
-    this.saveToStorage();
   }
+
+  this.saveToStorage();
+}
 
   analyzeSQL(sql) {
     const tips = [];
@@ -357,12 +437,47 @@ AND quantite > 0;`,
 
   loadExample(exampleKey) {
     if (this.sqlExamples[exampleKey]) {
-      this.inputSQL = this.sqlExamples[exampleKey];
+      const example = this.sqlExamples[exampleKey];
+      this.inputSQL = example.query;
       document.getElementById("input-sql").value = this.inputSQL;
       this.updateCharCount();
-      this.saveToStorage();
-      // Switch to formatter tab
+
+      // Afficher le conseil associé
+      this.displayRelatedTip(example.relatedTip);
+
+      // Passer à l'onglet "formatter"
       this.switchTab("formatter");
+    }
+  }
+
+  displayRelatedTip(tip) {
+    const tipsSection = document.getElementById("optimization-tips");
+    const tipsContent = document.getElementById("tips-content");
+    const tipsCount = document.getElementById("tips-count");
+
+    tipsContent.innerHTML = ""; // Efface les conseils précédents
+
+    if (tip) {
+      const tipElement = document.createElement("div");
+      tipElement.className = "tip-item";
+      tipElement.innerHTML = `
+        <div class="tip-indicator"></div>
+        <div class="tip-content">
+          <div class="tip-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              ${this.getIconSVG(tip.icon)}
+            </svg>
+            <span class="tip-title">${tip.title}</span>
+          </div>
+          <p class="tip-description">${tip.description}</p>
+          <code class="tip-example">${tip.example}</code>
+        </div>
+      `;
+      tipsContent.appendChild(tipElement);
+      tipsSection.style.display = "block";
+      tipsCount.textContent = "1";
+    } else {
+      tipsSection.style.display = "none";
     }
   }
 
