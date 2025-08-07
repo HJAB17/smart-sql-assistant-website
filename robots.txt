@@ -3,4 +3,4 @@ Disallow: /private/
 Disallow: /tmp/
 Disallow: /admin/
 
-Sitemap: http://smart-sql-assistant.ovh/sitemap.xml
+Sitemap: https://smart-sql-assistant.ovh/sitemap.xml
