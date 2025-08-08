@@ -44,7 +44,7 @@ Pendant le développement, plusieurs défis ont été rencontrés, notamment :
 2. Collez votre requête SQL dans la zone de texte prévue à cet effet.
 3. Cliquez sur "Formatter" pour obtenir le code SQL formaté.
 4. Consultez les conseils d'optimisation automatiques fournis.
-5. Utilisez les exemples rapides pour apprendre et vous inspirer.
+5. Utilisez les exemples rapides pour apprendre et vous inspirer. 
 
 ## Conseils d'optimisation détectés
 L'application peut détecter plusieurs problèmes d'optimisation courants, notamment :
@@ -55,3 +55,4 @@ L'application peut détecter plusieurs problèmes d'optimisation courants, notam
 - Recherches LIKE inefficaces
 - UPDATE/DELETE sans WHERE
 - GROUP BY sans HAVING approprié
+
